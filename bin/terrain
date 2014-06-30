@@ -1,0 +1,46 @@
+#!/usr/bin/env ruby
+$:.push File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
+ENV['BUNDLE_GEMFILE'] = File.expand_path(File.join(File.dirname(__FILE__), '..', 'Gemfile'))
+
+require 'rubygems'
+require 'bundler/setup'
+require 'trollop'
+require 'chunky_png'
+require 'perlin_noise'
+
+options = Trollop::options do
+  banner  "Usage: terrain [options]"
+  banner  ""
+  opt :seed,   "Noise seed",     :type => :int, :default => 123456
+  opt :width,  "Terrain width",  :type => :int, :default => 128
+  opt :height, "Terrain height", :type => :int, :default => 128
+  banner ""
+  opt :octaves,     "Number of octaves to combine",       :type => :int,   :default => 6
+  opt :persistence, "Persistence when combining octaves", :type => :float, :default => 0.6
+  banner ""
+end
+
+noise = PerlinNoise::Noise.new(options[:width], options[:height], Random.new(options[:seed]))
+
+# generate the noise
+noise.generate(options[:octaves], options[:persistence]) 
+
+# apply filters
+noise.normalize 
+noise.gamma_filter(1.2)
+noise.median_filter(2)
+
+# output perlin noise as a terrain
+noise.output("terrain-#{options[:seed]}.png") do |value|
+  if value <= 0.20
+    ChunkyPNG::Color.from_hex('#31586f')
+  elsif value <= 0.475
+    ChunkyPNG::Color.from_hex('#345f77')
+  elsif value <= 0.5
+    ChunkyPNG::Color.from_hex('#396882')
+  elsif value <= 0.65
+    ChunkyPNG::Color.from_hex('#544e41')
+  else
+    ChunkyPNG::Color.from_hex('#5c5543')
+  end
+end
