@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-module PerlinNoise::Utils
+module Noise::Utils
 
   def array
     Array.new(@width) { Array.new(@height) { yield } }

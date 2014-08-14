@@ -1,21 +1,21 @@
 #!/usr/bin/env ruby
 
-module PerlinNoise::Filters
+module Noise::Filters
 
   def normalize
     min, max = 1.0, 0.0
 
     xy do |x,y|
-      value = @perlin_noise[x][y]
+      value = @noise[x][y]
       min   = value if value < min
       max   = value if value > max
     end
 
-    xy { |x,y| @perlin_noise[x][y] = (@perlin_noise[x][y] - min)/(max - min)  }
+    xy { |x,y| @noise[x][y] = (@noise[x][y] - min)/(max - min)  }
   end
 
   def gamma_filter(gamma)
-    xy { |x,y| @perlin_noise[x][y] = @perlin_noise[x][y] ** gamma  }
+    xy { |x,y| @noise[x][y] = @noise[x][y] ** gamma  }
   end
 
   def median_filter(window)
@@ -23,7 +23,7 @@ module PerlinNoise::Filters
     edgey = (window / 2).floor
     noise = array { 0 }
 
-    xy { |x, y| noise[x][y] = @perlin_noise[x][y] }
+    xy { |x, y| noise[x][y] = @noise[x][y] }
 
     xy do |x,y|
       values = []
@@ -36,7 +36,7 @@ module PerlinNoise::Filters
           wx -= @width  if wx >= @width
           wy -= @height if wy >= @height
 
-          values << @perlin_noise[wx][wy]    
+          values << @noise[wx][wy]    
         end
       end
 
@@ -46,7 +46,7 @@ module PerlinNoise::Filters
       noise[x][y] = new_value
     end
 
-    @perlin_noise = noise
+    @noise = noise
   end
 
 end

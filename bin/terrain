@@ -6,10 +6,12 @@ require 'rubygems'
 require 'bundler/setup'
 require 'trollop'
 require 'chunky_png'
-require 'perlin_noise'
+require 'noise'
 
 options = Trollop::options do
   banner  "Usage: terrain [options]"
+  banner ""
+  opt :perlin_noise, "Use Perlin noise (default: value noise)", :type => :boolean
   banner  ""
   opt :seed,   "Noise seed",     :type => :int, :default => 123456
   opt :width,  "Terrain width",  :type => :int, :default => 128
@@ -20,7 +22,11 @@ options = Trollop::options do
   banner ""
 end
 
-noise = PerlinNoise::Noise.new(options[:width], options[:height], Random.new(options[:seed]))
+if options[:perlin_noise]
+  noise = Noise::PerlinNoise.new(options[:width], options[:height], Random.new(options[:seed]))
+else
+  noise = Noise::ValueNoise.new(options[:width], options[:height], Random.new(options[:seed]))
+end
 
 # generate the noise
 noise.generate(options[:octaves], options[:persistence]) 
@@ -30,8 +36,8 @@ noise.normalize
 noise.gamma_filter(1.2)
 noise.median_filter(2)
 
-# output perlin noise as a terrain
-noise.output("terrain-#{options[:seed]}.png") do |value|
+# output noise as a terrain
+noise.output("terrain-#{options[:perlin_noise] ? 'perlin' : 'value'}-#{options[:seed]}.png") do |value|
   if value <= 0.20
     ChunkyPNG::Color.from_hex('#31586f')
   elsif value <= 0.475

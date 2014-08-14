@@ -1,10 +1,10 @@
 #!/usr/bin/env ruby
 
-module PerlinNoise::Output
+module Noise::Output
 
   def output(filename)
     image = ChunkyPNG::Image.new(@width, @height)
-    xy { |x,y| image[x,y] = yield(@perlin_noise[x][y]) }
+    xy { |x,y| image[x,y] = yield(@noise[x][y]) }
     image.save(filename)
   end
 
