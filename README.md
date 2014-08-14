@@ -1,6 +1,6 @@
 # fractal_noise
 
-simple ruby script for generating images of 2D fractal noise using perlin noise or value noise
+simple ruby script for generating images of 2D fractal noise using Perlin noise or value noise
 
 **Installation**
 
