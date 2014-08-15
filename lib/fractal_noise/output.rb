@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-module Noise::Output
+module FractalNoise::Output
 
   def output(filename)
     image = ChunkyPNG::Image.new(@width, @height)

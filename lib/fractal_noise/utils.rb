@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-module Noise::Utils
+module FractalNoise::Utils
 
   def array
     Array.new(@width) { Array.new(@height) { yield } }

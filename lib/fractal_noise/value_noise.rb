@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-class Noise::ValueNoise < Noise::Base
+class FractalNoise::ValueNoise < FractalNoise::Base
   attr_reader :white_noise
 
   def initialize(width, height, random=Random.new)

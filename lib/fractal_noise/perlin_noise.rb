@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-class Noise::PerlinNoise < Noise::Base
+class FractalNoise::PerlinNoise < FractalNoise::Base
 
   def initialize(width, height, random=Random.new)
     super

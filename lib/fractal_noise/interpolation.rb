@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-module Noise::Interpolation
+module FractalNoise::Interpolation
 
   def linear_interpolation(a, b, alpha)
     a * (1 - alpha) + b * alpha

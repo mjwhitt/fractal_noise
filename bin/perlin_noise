@@ -6,10 +6,10 @@ require 'rubygems'
 require 'bundler/setup'
 require 'trollop'
 require 'chunky_png'
-require 'noise'
+require 'fractal_noise'
 
 options = Trollop::options do
-  version "perlin_noise #{Noise::VERSION} (c) 2014 Melissa Whittington"
+  version "perlin_noise #{FractalNoise::VERSION} (c) 2014 Melissa Whittington"
   banner  "Usage: perlin_noise [options]"
   banner  ""
   opt :seed,   "Noise seed",   :type => :int, :default => 123456
@@ -30,7 +30,7 @@ end
 Trollop::die :persistence, "should be a value greater than 0.0"          unless options[:persistence]  > 0.0
 Trollop::die :persistence, "should be a value less than or equal to 1.0" unless options[:persistence] <= 1.0
 
-noise = Noise::PerlinNoise.new(options[:width], options[:height], Random.new(options[:seed]))
+noise = FractalNoise::PerlinNoise.new(options[:width], options[:height], Random.new(options[:seed]))
 
 # generate the noise
 noise.generate(options[:octaves], options[:persistence])

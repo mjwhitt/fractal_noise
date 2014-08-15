@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-module Noise::Filters
+module FractalNoise::Filters
 
   def normalize
     min, max = 1.0, 0.0

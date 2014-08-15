@@ -6,7 +6,7 @@ require 'rubygems'
 require 'bundler/setup'
 require 'trollop'
 require 'chunky_png'
-require 'noise'
+require 'fractal_noise'
 
 options = Trollop::options do
   banner  "Usage: terrain [options]"
@@ -23,9 +23,9 @@ options = Trollop::options do
 end
 
 if options[:perlin_noise]
-  noise = Noise::PerlinNoise.new(options[:width], options[:height], Random.new(options[:seed]))
+  noise = FractalNoise::PerlinNoise.new(options[:width], options[:height], Random.new(options[:seed]))
 else
-  noise = Noise::ValueNoise.new(options[:width], options[:height], Random.new(options[:seed]))
+  noise = FractalNoise::ValueNoise.new(options[:width], options[:height], Random.new(options[:seed]))
 end
 
 # generate the noise

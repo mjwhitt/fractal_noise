@@ -1,12 +1,12 @@
 #!/usr/bin/env ruby
 
-class Noise::Base
+class FractalNoise::Base
   attr_reader :noise, :octave_noise
 
-  include Noise::Interpolation
-  include Noise::Utils
-  include Noise::Filters
-  include Noise::Output
+  include FractalNoise::Interpolation
+  include FractalNoise::Utils
+  include FractalNoise::Filters
+  include FractalNoise::Output
 
   def initialize(width, height, random=Random.new)
     @width, @height = width, height
