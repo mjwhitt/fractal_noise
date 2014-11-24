@@ -1,17 +1,10 @@
 #!/usr/bin/env ruby
 
 class FractalNoise::ValueNoise < FractalNoise::Base
-  attr_reader :white_noise
 
   def initialize(width, height, random=Random.new)
     super
     @white_noise = array { random.rand }
-  end
-
-  private
-
-  def interpolate(a, b, alpha)
-    cosine_interpolation(a, b, alpha)
   end
 
   def noise(octave)
@@ -37,6 +30,12 @@ class FractalNoise::ValueNoise < FractalNoise::Base
     end
 
     return noise
+  end
+
+  private
+
+  def interpolate(a, b, alpha)
+    cosine_interpolation(a, b, alpha)
   end
 
 end

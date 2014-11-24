@@ -1,0 +1,66 @@
+#!/usr/bin/env ruby
+$:.push File.expand_path(File.join(File.dirname(__FILE__), '..', 'lib'))
+ENV['BUNDLE_GEMFILE'] = File.expand_path(File.join(File.dirname(__FILE__), '..', 'Gemfile'))
+
+require 'rubygems'
+require 'bundler/setup'
+require 'trollop'
+require 'chunky_png'
+require 'fractal_noise'
+
+options = Trollop::options do
+  version "fractal_noise #{FractalNoise::VERSION} (c) 2014 Melissa Whittington"
+  banner  "Usage: fractal_noise [options]"
+  banner  ""
+  opt :algorithm, "Noise algorithm (#{FractalNoise::ALGORITHMS.join(', ')})", :type => :string, :default => 'value'
+  opt :seed,      "Noise random seed",                                        :type => :int,    :default => 123456
+  banner ""
+  opt :octaves,     "Number of octaves to combine",       :type => :int,   :default => 6
+  opt :persistence, "Persistence when combining octaves", :type => :float, :default => 0.6
+  banner ""
+  opt :normalize,     "Normalize the noise",   :type => :boolean
+  opt :gamma_filter,  "Apply a gamma filter",  :type => :float
+  opt :median_filter, "Apply a median filter", :type => :int
+  banner  ""
+  opt :width,  "Output width",  :type => :int, :default => 128
+  opt :height, "Output height", :type => :int, :default => 128
+  banner ""
+  opt :output_octaves, "Also output each octave", :type => :boolean
+  banner ""
+end
+
+Trollop::die :algorithm,     "should be one of the following: #{FractalNoise::ALGORITHMS.join(', ')}" unless FractalNoise::ALGORITHMS.member?(options[:algorithm])
+Trollop::die :octaves,       "should be greater than 0"            unless options[:octaves] > 0
+Trollop::die :persistence,   "should be greater than 0.0"          unless options[:persistence] > 0.0
+Trollop::die :persistence,   "should be less than or equal to 1.0" unless options[:persistence] <= 1.0
+Trollop::die :median_filter, "should be greater than 0"            unless options[:median_filter].nil? || options[:median_filter] > 0
+Trollop::die :height,        "should be greater than 0"            unless options[:height] > 0
+Trollop::die :width,         "should be greater than 0"            unless options[:width] > 0
+
+# initialize noise
+noise = case options[:algorithm]
+  when 'value'
+    FractalNoise::ValueNoise.new(options[:width], options[:height], Random.new(options[:seed]))
+  when 'perlin'
+    FractalNoise::PerlinNoise.new(options[:width], options[:height], Random.new(options[:seed]))
+end
+
+# generate noise
+noise.generate(options[:octaves], options[:persistence])
+
+# apply filters
+noise.normalize                              if options[:normalize]
+noise.gamma_filter(options[:gamma_filter])   if options[:gamma_filter]
+noise.median_filter(options[:median_filter]) if options[:median_filter]
+
+# output noise as a grayscale image
+noise.grayscale("#{options[:algorithm]}-#{options[:seed]}.png")
+
+# output each octave as a grayscale image
+options[:octaves].times do |o|
+  noise.output_xy("#{options[:algorithm]}-#{options[:seed]}-octave-#{o}.png") do |x,y|
+    value = noise.octaves[o][x][y]
+    color = (value == 1.0 ? 255.0 : value * 256.0).floor
+    ChunkyPNG::Color.rgb(color, color, color)
+  end
+end if options[:output_octaves]

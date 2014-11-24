@@ -7,12 +7,6 @@ class FractalNoise::PerlinNoise < FractalNoise::Base
     @p = (0...(@width > @height ? @width : @height)).to_a.shuffle(random: random)*2
   end
 
-  private
-
-  def interpolate(a, b, alpha)
-    linear_interpolation(a, b, alpha)
-  end
-
   def noise(octave)
     noise     = array { nil }
     period    = 1 << octave
@@ -42,6 +36,12 @@ class FractalNoise::PerlinNoise < FractalNoise::Base
     end
 
     return noise
+  end
+
+  private
+
+  def interpolate(a, b, alpha)
+    linear_interpolation(a, b, alpha)
   end
 
   def fade(t)

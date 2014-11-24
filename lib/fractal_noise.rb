@@ -1,7 +1,8 @@
 #!/usr/bin/env ruby
 
 module FractalNoise
-  VERSION = '1.2.0'
+  VERSION    = '1.3.0'
+  ALGORITHMS = ['value', 'perlin']
 end
 
 require 'chunky_png'

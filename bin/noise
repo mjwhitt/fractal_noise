@@ -9,12 +9,13 @@ require 'chunky_png'
 require 'fractal_noise'
 
 options = Trollop::options do
-  banner  "Usage: terrain [options]"
-  banner ""
+  version "noise #{FractalNoise::VERSION} (c) 2014 Melissa Whittington"
+  banner  "Usage: noise [options]"
+  banner  ""
   opt :algorithm, "Noise algorithm (#{FractalNoise::ALGORITHMS.join(', ')})", :type => :string, :default => 'value'
   opt :seed,      "Noise random seed",                                        :type => :int,    :default => 123456
-  banner ""
-  opt :octaves, "Number of octaves to combine", :type => :int, :default => 6
+  banner  ""
+  opt :octave, "Which octave to generate", :type => :int, :default => 6
   banner  ""
   opt :width,  "Output width",  :type => :int, :default => 128
   opt :height, "Output height", :type => :int, :default => 128
@@ -22,9 +23,9 @@ options = Trollop::options do
 end
 
 Trollop::die :algorithm, "should be one of the following: #{FractalNoise::ALGORITHMS.join(', ')}" unless FractalNoise::ALGORITHMS.member?(options[:algorithm])
-Trollop::die :octaves,   "should be greater than 0" unless options[:octaves] > 0
-Trollop::die :height,    "should be greater than 0" unless options[:height]  > 0
-Trollop::die :width,     "should be greater than 0" unless options[:width]   > 0
+Trollop::die :octave,    "should be greater than or equal to 0" unless options[:octave] >= 0
+Trollop::die :height,    "should be greater than 0" unless options[:height] > 0
+Trollop::die :width,     "should be greater than 0" unless options[:width] > 0
 
 # initialize noise
 noise = case options[:algorithm]
@@ -33,26 +34,11 @@ noise = case options[:algorithm]
   when 'perlin'
     FractalNoise::PerlinNoise.new(options[:width], options[:height], Random.new(options[:seed]))
 end
+octave = noise.noise(options[:octave])
 
-# generate the noise
-noise.generate(options[:octaves], 0.6) 
-
-# apply filters
-noise.normalize 
-noise.gamma_filter(1.2)
-noise.median_filter(2)
-
-# output noise as a terrain
-noise.output("terrain-#{options[:seed]}.png") do |value|
-  if value <= 0.20
-    ChunkyPNG::Color.from_hex('#31586f')
-  elsif value <= 0.475
-    ChunkyPNG::Color.from_hex('#345f77')
-  elsif value <= 0.5
-    ChunkyPNG::Color.from_hex('#396882')
-  elsif value <= 0.65
-    ChunkyPNG::Color.from_hex('#544e41')
-  else
-    ChunkyPNG::Color.from_hex('#5c5543')
-  end
+# output noise as a grayscale image
+noise.output_xy("#{options[:algorithm]}-#{options[:seed]}-octave-#{options[:octave]}.png") do |x,y|
+  value = octave[x][y]
+  color = (value == 1.0 ? 255.0 : value * 256.0).floor
+  ChunkyPNG::Color.rgb(color, color, color)
 end
