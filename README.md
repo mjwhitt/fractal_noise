@@ -20,6 +20,7 @@ simple ruby script for generating images of 2D fractal noise using Perlin noise 
 
 **See Also**
 
-* [Value Noise](http://www.spacedust.info/2014/06/value-noise/)
-* [Value Noise - Extras](http://www.spacedust.info/2014/07/value-noise-extras/)
-* [Value Noise - Tiled](http://www.spacedust.info/2014/08/value-noise-tiled/)
+* [Fractal Noise Using Value Noise](http://www.spacedust.info/2014/06/value-noise/)
+* [Fractal Noise Using Value Noise - Extras](http://www.spacedust.info/2014/07/value-noise-extras/)
+* [Fractal Noise Using Value Noise - Tiled](http://www.spacedust.info/2014/08/value-noise-tiled/)
+* [Fractal Noise Using Perlin Noise](http://www.spacedust.info/2014/11/perlin-noise/)
