@@ -43,7 +43,7 @@ noise.gamma_filter(1.2)
 noise.median_filter(2)
 
 # output noise as a terrain
-noise.output("terrain-#{options[:seed]}.png") do |value|
+noise.output("output/terrain-#{options[:seed]}.png") do |value|
   if value <= 0.20
     ChunkyPNG::Color.from_hex('#31586f')
   elsif value <= 0.475

@@ -37,7 +37,7 @@ end
 octave = noise.noise(options[:octave])
 
 # output noise as a grayscale image
-noise.output_xy("#{options[:algorithm]}-#{options[:seed]}-octave-#{options[:octave]}.png") do |x,y|
+noise.output_xy("output/#{options[:algorithm]}-#{options[:seed]}-octave-#{options[:octave]}.png") do |x,y|
   value = octave[x][y]
   color = (value == 1.0 ? 255.0 : value * 256.0).floor
   ChunkyPNG::Color.rgb(color, color, color)

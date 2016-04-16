@@ -10,17 +10,25 @@ simple ruby script for generating images of 2D fractal noise using Perlin noise 
 
 **Example Output**
 
+> ./bin/noise -a value -s 1138 -o 5 -w 256 -h 256
+
+![output/value-1138-octave-5.png](output/value-1138-octave-5.png)
+
+> ./bin/noise -a perlin -s 1138 -o 5 -w 256 -h 256
+
+![perlin-1138-octave-5.png](output/perlin-1138-octave-5.png)
+
 > ./bin/fractal_noise -a value -s 1138 -w 256 -h 256 -n
 
-![value-1138.png](value-1138.png)
+![value-1138.png](output/value-1138.png)
 
 > ./bin/fractal_noise -a perlin -s 1138 -w 256 -h 256 -n
 
-![perlin-1138.png](perlin-1138.png)
+![perlin-1138.png](output/perlin-1138.png)
 
 > ./bin/terrain -s 1138 -w 256 -h 256
 
-![terrain-1138.png](terrain-1138.png)
+![terrain-1138.png](output/terrain-1138.png)
 
 **See Also**
 

@@ -54,11 +54,11 @@ noise.gamma_filter(options[:gamma_filter])   if options[:gamma_filter]
 noise.median_filter(options[:median_filter]) if options[:median_filter]
 
 # output noise as a grayscale image
-noise.grayscale("#{options[:algorithm]}-#{options[:seed]}.png")
+noise.grayscale("output/#{options[:algorithm]}-#{options[:seed]}.png")
 
 # output each octave as a grayscale image
 options[:octaves].times do |o|
-  noise.output_xy("#{options[:algorithm]}-#{options[:seed]}-octave-#{o}.png") do |x,y|
+  noise.output_xy("output/#{options[:algorithm]}-#{options[:seed]}-octave-#{o}.png") do |x,y|
     value = noise.octaves[o][x][y]
     color = (value == 1.0 ? 255.0 : value * 256.0).floor
     ChunkyPNG::Color.rgb(color, color, color)
