@@ -16,17 +16,18 @@ class FractalNoise::Base
     @fractal = array { 0.0 } 
     @octaves = Array.new(octaves) { |octave| noise(octave) }
 
-    amplitude = 1.0
-    max       = 0.0
+    amplitude = array { 1.0 }
+    max       = array { 0.0 }
 
     (octaves - 1).downto(0) do |octave|
-      amplitude *= persistence
-      max       += amplitude
-
-      xy { |x,y| @fractal[x][y] += @octaves[octave][x][y] * amplitude }
+      xy do |x,y|
+        amplitude[x][y] *= persistence.is_a?(Array) ? persistence[x][y] : persistence
+        max[x][y]       += amplitude[x][y]
+        @fractal[x][y]  += @octaves[octave][x][y] * amplitude[x][y]
+      end
     end
 
-    xy { |x,y| @fractal[x][y] /= max }
+    xy { |x,y| @fractal[x][y] /= max[x][y] }
 
     return @fractal
   end
