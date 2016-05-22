@@ -49,4 +49,8 @@ module FractalNoise::Filters
     @fractal = noise
   end
 
+  def range(min, max)
+    xy { |x, y| @fractal[x][y] = ((@fractal[x][y] * (max - min)) / 1.0) + min }
+  end
+
 end
