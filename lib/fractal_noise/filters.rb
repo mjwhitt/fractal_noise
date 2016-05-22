@@ -6,16 +6,16 @@ module FractalNoise::Filters
     min, max = 1.0, 0.0
 
     xy do |x,y|
-      value = @noise[x][y]
+      value = @fractal[x][y]
       min   = value if value < min
       max   = value if value > max
     end
 
-    xy { |x,y| @noise[x][y] = (@noise[x][y] - min)/(max - min)  }
+    xy { |x,y| @fractal[x][y] = (@fractal[x][y] - min)/(max - min)  }
   end
 
   def gamma_filter(gamma)
-    xy { |x,y| @noise[x][y] = @noise[x][y] ** gamma  }
+    xy { |x,y| @fractal[x][y] = @fractal[x][y] ** gamma  }
   end
 
   def median_filter(window)
@@ -23,7 +23,7 @@ module FractalNoise::Filters
     edgey = (window / 2).floor
     noise = array { 0 }
 
-    xy { |x, y| noise[x][y] = @noise[x][y] }
+    xy { |x, y| noise[x][y] = @fractal[x][y] }
 
     xy do |x,y|
       values = []
@@ -36,7 +36,7 @@ module FractalNoise::Filters
           wx -= @width  if wx >= @width
           wy -= @height if wy >= @height
 
-          values << @noise[wx][wy]    
+          values << @fractal[wx][wy]    
         end
       end
 
@@ -46,7 +46,7 @@ module FractalNoise::Filters
       noise[x][y] = new_value
     end
 
-    @noise = noise
+    @fractal = noise
   end
 
 end

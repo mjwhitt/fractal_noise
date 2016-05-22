@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 class FractalNoise::Base
-  attr_reader :noise, :octaves
+  attr_reader :fractal, :octaves
 
   include FractalNoise::Interpolation
   include FractalNoise::Utils
@@ -13,7 +13,7 @@ class FractalNoise::Base
   end
 
   def generate(octaves=6, persistence=0.6)
-    @noise   = array { 0.0 } 
+    @fractal = array { 0.0 } 
     @octaves = Array.new(octaves) { |octave| noise(octave) }
 
     amplitude = 1.0
@@ -23,12 +23,12 @@ class FractalNoise::Base
       amplitude *= persistence
       max       += amplitude
 
-      xy { |x,y| @noise[x][y] += @octaves[octave][x][y] * amplitude }
+      xy { |x,y| @fractal[x][y] += @octaves[octave][x][y] * amplitude }
     end
 
-    xy { |x,y| @noise[x][y] /= max }
+    xy { |x,y| @fractal[x][y] /= max }
 
-    return @noise
+    return @fractal
   end
 
 end

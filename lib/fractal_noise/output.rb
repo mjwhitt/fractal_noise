@@ -4,7 +4,7 @@ module FractalNoise::Output
 
   def output(filename)
     image = ChunkyPNG::Image.new(@width, @height)
-    xy { |x,y| image[x,y] = yield(@noise[x][y]) }
+    xy { |x,y| image[x,y] = yield(@fractal[x][y]) }
     image.save(filename)
   end
 
